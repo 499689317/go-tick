@@ -7,8 +7,8 @@ import (
 
 // Handle 对外接口
 type Handle interface {
-	onTickerUpdate(nowTime int64) bool
-	onTickerExit(notTime int64) bool
+	OnTickerUpdate(nowTime int64) bool
+	OnTickerExit(nowTime int64) bool
 }
 
 // TickHandle tick handle
@@ -81,7 +81,7 @@ func (t *Ticker) onTimerHandle(nowTime int64) {
 	for i := 0; i < len(t.handles); i++ {
 		p := &t.handles[i]
 		if nowTime > p.dealTime {
-			if p.handle.onTickerUpdate(nowTime) {
+			if p.handle.OnTickerUpdate(nowTime) {
 				p.dealTime += p.delayTime
 				p.longTime -= p.delayTime
 				if p.longTime <= 0 {
@@ -92,7 +92,7 @@ func (t *Ticker) onTimerHandle(nowTime int64) {
 			}
 		}
 		if isDel {
-			p.handle.onTickerExit(nowTime)
+			p.handle.OnTickerExit(nowTime)
 			t.handles = append(t.handles[0:i], t.handles[i+1:]...)
 			i--
 		}
